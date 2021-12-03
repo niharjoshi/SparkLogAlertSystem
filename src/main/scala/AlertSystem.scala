@@ -16,7 +16,9 @@ object AlertSystem {
 
     val messages = df.selectExpr("CAST(value AS STRING)")
 
-    val query = messages.writeStream.format("text").start()
+    val query = messages.writeStream.
+      option("path", "data.txt").
+      format("text").start()
 
     query.awaitTermination()
     query.stop()
