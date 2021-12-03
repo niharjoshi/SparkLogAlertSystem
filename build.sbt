@@ -10,6 +10,8 @@ libraryDependencies += "org.apache.spark" % "spark-core_2.11" % sparkVersion
 
 libraryDependencies += "org.apache.spark" % "spark-sql_2.11" % sparkVersion
 
+libraryDependencies += "org.apache.spark" % "spark-sql-kafka-0-10_2.11" % sparkVersion
+
 libraryDependencies += "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % sparkVersion
 
 libraryDependencies += "org.apache.kafka" % "kafka-clients" % "3.0.0"
