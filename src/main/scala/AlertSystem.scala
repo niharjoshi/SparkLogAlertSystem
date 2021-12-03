@@ -22,11 +22,11 @@ object AlertSystem {
 
     val messages = df.selectExpr("CAST(value AS STRING)")
 
-    val modified_messages = messages.select(split(col("value"), " ").
-      getItem(0).as("Timestamp").
-      getItem(2).as("Level").
-      getItem(3).as("Source").
-      getItem(5).as("Message")
+    val modified_messages = messages.select(
+      split(col("value"), " ").getItem(0).as("Timestamp"),
+      split(col("value"), " ").getItem(2).as("Level"),
+      split(col("value"), " ").getItem(3).as("Source"),
+      split(col("value"), " ").getItem(5).as("Message")
     )
 
     modified_messages.writeStream.outputMode("append").format("console").start.awaitTermination()
