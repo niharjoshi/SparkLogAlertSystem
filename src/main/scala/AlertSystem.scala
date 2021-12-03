@@ -17,6 +17,7 @@ object AlertSystem {
 
     val messages = df.selectExpr("CAST(value AS STRING)")
 
-    messages.collect.foreach(println)
+    val query = messages.writeStream.outputMode("append").format("console").start.awaitTermination
+
   }
 }
