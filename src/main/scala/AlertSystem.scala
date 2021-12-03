@@ -22,7 +22,7 @@ object AlertSystem {
 
     val messages = df.selectExpr("CAST(value AS STRING)")
 
-    messages.withColumn("_tmp", split($"values", "\\ ")).select(
+    messages.withColumn("_tmp", split($"value", "\\ ")).select(
       $"_tmp".getItem(0).as("timestamp"),
       $"_tmp".getItem(2).as("level")
     )
