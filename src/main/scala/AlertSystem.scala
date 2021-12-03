@@ -18,6 +18,7 @@ object AlertSystem {
 
     val query = messages.writeStream.
       option("path", "data.txt").
+      option("checkpointLocation", "checkpoint.txt").
       format("text").start()
 
     query.awaitTermination()
