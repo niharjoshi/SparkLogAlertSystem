@@ -2,7 +2,7 @@ name := "SparkLogAlertSystem"
 
 version := "0.1"
 
-scalaVersion := "2.13.7"
+scalaVersion := "2.11.12"
 
 val sparkVersion = "2.4.8"
 
