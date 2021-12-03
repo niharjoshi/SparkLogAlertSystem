@@ -27,7 +27,7 @@ object AlertSystem {
       $"_tmp".getItem(2).as("level")
     )
 
-    messages.writeStream.outputMode("append").format("console").start.awaitTermination
+    messages.writeStream.outputMode("append").format("console").start.awaitTermination(10000)
 
     println("---->")
     println(messages)
