@@ -1,4 +1,5 @@
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.split
 
 object AlertSystem {
 
@@ -6,6 +7,8 @@ object AlertSystem {
 
     val spark = SparkSession.builder.getOrCreate()
     spark.sparkContext.setLogLevel("ERROR")
+
+    import spark.implicits._
 
     val topicName = "logs"
 
@@ -19,7 +22,15 @@ object AlertSystem {
 
     val messages = df.selectExpr("CAST(value AS STRING)")
 
-    val query = messages.writeStream.outputMode("append").format("console").start.awaitTermination
+    messages.withColumn("_tmp", split($"values", "\\ ")).select(
+      $"_tmp".getItem(0).as("timestamp"),
+      $"_tmp".getItem(2).as("level")
+    )
+
+    messages.writeStream.outputMode("append").format("console").start.awaitTermination
+
+    println("---->")
+    println(messages)
 
   }
 }
