@@ -1,4 +1,4 @@
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions.{col, split}
 
 object AlertSystem {
@@ -31,5 +31,46 @@ object AlertSystem {
 
     modified_messages.writeStream.outputMode("append").format("console").start.awaitTermination()
 
+    val mail = createHtmlEmailBody(modified_messages)
+
+    println(mail)
+
+  }
+
+  def createHtmlEmailBody(df: DataFrame): String = {
+    val columnNames = df.columns.map(x => "<th>" + x.trim + "</th>").mkString
+    val data = df.collect.mkString
+    val data1 = data.split(",").map(x => "<td>".concat(x).concat("</td>"))
+    val data2 = data1.mkString.replaceAll("<td>\\[", "<tr><td>")
+    val data3 = data2.mkString.replaceAll("]\\[", "</td></tr><td>").replaceAll("]", "")
+
+    val msg =
+      s"""<!DOCTYPE html>
+         |<html>
+         |   <head>
+         |      <style>
+         |         table {
+         |            border: 1px solid black;
+         |         }
+         |         th {
+         |          border: 1px solid black;
+         |          background-color: #FFA;
+         |          }
+         |         td {
+         |          border: 1px solid black;
+         |          background-color: #FFF;
+         |          }
+         |      </style>
+         |   </head>
+         |
+         |   <body>
+         |      <h1>Report</h1>
+         |      <table>
+         |         <tr> $columnNames </tr> $data3
+         |      </table>
+         |   </body>
+         |</html>""".stripMargin
+
+    msg
   }
 }
