@@ -29,11 +29,13 @@ object AlertSystem {
       split(col("value"), " ").getItem(5).as("Message")
     )
 
+    val mail_body = modified_messages.writeStream.outputMode("append").format("console").start
+
     val mail = createHtmlEmailBody(modified_messages)
 
     println(mail)
 
-    modified_messages.writeStream.outputMode("append").format("console").start.awaitTermination()
+    mail_body.awaitTermination
 
   }
 
