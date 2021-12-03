@@ -3,7 +3,9 @@ import org.apache.spark.sql.SparkSession
 object AlertSystem {
 
   def main(args: Array[String]) = {
+
     val spark = SparkSession.builder.getOrCreate()
+    spark.sparkContext.setLogLevel("ERROR")
 
     val topicName = "logs"
 
