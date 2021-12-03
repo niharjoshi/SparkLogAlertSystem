@@ -1,5 +1,5 @@
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.split
+import org.apache.spark.sql.functions.{col, split}
 
 object AlertSystem {
 
@@ -22,10 +22,7 @@ object AlertSystem {
 
     val messages = df.selectExpr("CAST(value AS STRING)")
 
-    messages.withColumn("_tmp", split($"value", "\\ ")).select(
-      $"_tmp".getItem(0).as("timestamp"),
-      $"_tmp".getItem(2).as("level")
-    )
+    messages.select(split(col("value"), " ").getItem(0).as("Timestamp"))
 
     messages.writeStream.outputMode("append").format("console").start.awaitTermination(10000)
 
