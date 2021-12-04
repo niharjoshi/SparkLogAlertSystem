@@ -1,8 +1,9 @@
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions.{col, split}
 
-import javax.mail._
-import javax.mail.internet._
+import courier._, Defaults._
+import scala.util._
+import mail._
 
 object AlertSystem {
 
@@ -69,26 +70,41 @@ object AlertSystem {
          |   </body>
          |</html>""".stripMargin
 
+    send a Mail (
+      from = ("nsj0596@gmail.com", "John Smith"),
+      to = "rajitsp@gmail.com",
+      cc = "valluruindra@gmail.com",
+      subject = "Eureka",
+      message = msg
+    )
 
-    val props = System.getProperties
-    props.setProperty("mail.smtp.host", "smtp.gmail.com")
-    props.setProperty("mail.smtp.user", "user")
-    props.setProperty("mail.smtp.host", "smtp.gmail.com")
-    props.setProperty("mail.smtp.port", "587")
-    props.setProperty("mail.debug", "true")
-    props.setProperty("mail.smtp.auth", "true")
-    props.setProperty("mail.smtp.starttls.enable", "true")
-    props.setProperty("mail.smtp.EnableSSL.enable","true")
 
-    val session = Session.getInstance(props)
-    val message = new MimeMessage(session)
 
-    message.setFrom(new InternetAddress("nsj0596@gmail.com"))
-    message.setRecipients(Message.RecipientType.TO, "rajitsp@gmail.com")
-    message.setSubject("Eureka")
-    message.setText(msg)
+    //    val mailer = Mailer("smtp.gmail.com", 587)
+//      .auth(true)
+//      .as("nsj0596@gmail.com", "vtn0cvd@bzy6KTX*vwp")
+//      .startTls(true)()
+//    mailer(Envelope.from("nsj0596@gmail.com")
+//      .to("mom" `@` "gmail.com")
+//      .cc("dad" `@` "gmail.com")
+//      .subject("miss you")
+//      .content(Text("hi mom"))).onComplete {
+//      case Success(_) => println("message delivered")
+//      case Failure(_) => println("delivery failed")
+//    }
+//
+//    mailer(Envelope.from("you" `@` "work.com")
+//      .to("boss" `@` "work.com")
+//      .subject("tps report")
+//      .content(Multipart()
+//        .attach(new java.io.File("tps.xls"))
+//        .html("<html><body><h1>IT'S IMPORTANT</h1></body></html>")))
+//      .onComplete {
+//        case Success(_) => println("delivered report")
+//        case Failure(_) => println("delivery failed")
+//      }
 
-    Transport.send(message)
+
 
     msg
 

@@ -16,7 +16,9 @@ libraryDependencies += "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % 
 
 libraryDependencies += "org.apache.kafka" % "kafka-clients" % "3.0.0"
 
-libraryDependencies += "javax.mail" % "mail" % "1.4.7"
+libraryDependencies += "com.github.daddykotex" %% "courier" % "3.0.1"
+
+libraryDependencies += "org.apache.commons" % "commons-email" % "1.5"
 
 // META-INF discarding
 assemblyMergeStrategy in assembly := {
