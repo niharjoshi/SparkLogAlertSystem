@@ -25,14 +25,13 @@ object AlertSystem {
 //        split(col("value"), " ").getItem(5).as("Message")
 //      )
 
-    val mail = df.as[String].foreach(
-      x => {
-        val msg = createHtmlEmailBody(x)
-        println(msg)
-      }
-    )
+    val mail = df.as[String].flatMap(i => {
+      val msg = createHtmlEmailBody(_)
+      println(msg)
+      i.split("")
+    })
 
-    df.writeStream.outputMode("append").format("console").start.awaitTermination(20000)
+    mail.writeStream.outputMode("append").format("console").start.awaitTermination(20000)
 
     println("Terminated")
   }
@@ -71,6 +70,6 @@ object AlertSystem {
          |   </body>
          |</html>""".stripMargin
 
-    msg
+    return msg
   }
 }
