@@ -2,8 +2,10 @@ package Email
 
 object Email {
 
+  // Function to create email body
   def createEmail(logs: String) = {
 
+    // Creating email body
     val email =
       s"""
          |Hello there.
@@ -16,6 +18,7 @@ object Email {
          |
          |""".stripMargin
 
+    // Returning email body
     email
 
   }

@@ -18,6 +18,8 @@ libraryDependencies += "org.apache.kafka" % "kafka-clients" % "3.0.0"
 
 libraryDependencies += "com.amazonaws" % "aws-java-sdk" % "1.12.122"
 
+libraryDependencies += "com.typesafe" % "config" % "1.4.1"
+
 // META-INF discarding
 assemblyMergeStrategy in assembly := {
   case PathList("META-INF","services",xs @ _*) => MergeStrategy.filterDistinctLines
