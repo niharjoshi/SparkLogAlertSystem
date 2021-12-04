@@ -1,11 +1,8 @@
-import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.apache.spark.sql.functions.{col, split}
-
-import courier._, Defaults._
-import scala.util._
-import mail._
-
-import com.spark.mail.Email
+import org.apache.spark.sql.SparkSession
+import com.amazonaws.services.sns.AmazonSNSClient
+import com.amazonaws.services.sns.model.PublishRequest
+import Email.Email
+import com.amazonaws.regions.{Region, Regions}
 
 object AlertSystem {
 
@@ -24,12 +21,6 @@ object AlertSystem {
       option("kafka.security.protocol", "PLAINTEXT").
       load().
       selectExpr("CAST(value AS STRING)")
-//      select(
-//        split(col("value"), " ").getItem(0).as("Timestamp"),
-//        split(col("value"), " ").getItem(2).as("Level"),
-//        split(col("value"), " ").getItem(3).as("Source"),
-//        split(col("value"), " ").getItem(5).as("Message")
-//      )
 
     val mail = df.as[String].flatMap(i => {
       sendEmail(i)
@@ -43,61 +34,15 @@ object AlertSystem {
 
   def sendEmail(m: String): String = {
 
-    val log_data = m.split(" ").toList
+    val msg = Email.createEmail(m)
 
-    val msg =
-      s"""<!DOCTYPE html>
-         |<html>
-         |   <head>
-         |      <style>
-         |         table {
-         |            border: 1px solid black;
-         |         }
-         |         th {
-         |          border: 1px solid black;
-         |          background-color: #FFA;
-         |          }
-         |         td {
-         |          border: 1px solid black;
-         |          background-color: #FFF;
-         |          }
-         |      </style>
-         |   </head>
-         |
-         |   <body>
-         |      <h1>Report</h1>
-         |      <table>
-         |         <tr> Message </tr> $m
-         |      </table>
-         |   </body>
-         |</html>""".stripMargin
+    val topicArn = "arn:aws:sns:us-east-2:824124316412:logs"
 
-//    send a Mail (
-//      from = ("nsj0596@gmail.com", "John Smith"),
-//      to = "rajitsp@gmail.com",
-//      cc = "valluruindra@gmail.com",
-//      subject = "Eureka",
-//      message = msg
-//    )
+    val snsClient = new AmazonSNSClient()
+    snsClient.setRegion(Region.getRegion(Regions.US_EAST_2))
 
-
-
-    //    val mailer = Mailer("smtp.gmail.com", 587)
-//      .auth(true)
-//      .as("nsj0596@gmail.com", "vtn0cvd@bzy6KTX*vwp")
-//      .startTls(true)()
-//    mailer(Envelope.from("nsj0596@gmail.com")
-//      .to("mom" `@` "gmail.com")
-//      .cc("dad" `@` "gmail.com")
-//      .subject("miss you")
-//      .content(Text("hi mom"))).onComplete {
-//      case Success(_) => println("message delivered")
-//      case Failure(_) => println("delivery failed")
-//    }
-
-    val mail = new Email("/home/hadoop/SparkLogAlertSystem/src/main/resource/application.conf")
-
-    mail.sendMail(msg, "appID", "", "F")
+    val publishRequest = new PublishRequest(topicArn, msg)
+    snsClient.publish(publishRequest)
 
     msg
 
