@@ -20,6 +20,8 @@ libraryDependencies += "com.amazonaws" % "aws-java-sdk" % "1.12.122"
 
 libraryDependencies += "com.typesafe" % "config" % "1.4.1"
 
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.9"
+
 // META-INF discarding
 assemblyMergeStrategy in assembly := {
   case PathList("META-INF","services",xs @ _*) => MergeStrategy.filterDistinctLines
