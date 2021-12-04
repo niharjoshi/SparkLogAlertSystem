@@ -31,6 +31,8 @@ object AlertSystem {
     )
 
     df.writeStream.outputMode("append").format("console").start.awaitTermination(20000)
+
+    println("Terminated")
   }
 
   def createHtmlEmailBody(df: String): String = {
