@@ -16,12 +16,14 @@ object AlertSystem {
       option("kafka.bootstrap.servers", "b-3.logfilegeneratorkafkac.c9jlb9.c7.kafka.us-east-2.amazonaws.com:9092,b-2.logfilegeneratorkafkac.c9jlb9.c7.kafka.us-east-2.amazonaws.com:9092,b-1.logfilegeneratorkafkac.c9jlb9.c7.kafka.us-east-2.amazonaws.com:9092").
       option("subscribe", topicName).
       option("kafka.security.protocol", "PLAINTEXT").
-      load().selectExpr("CAST(value AS STRING)").select(
-      split(col("value"), " ").getItem(0).as("Timestamp"),
-      split(col("value"), " ").getItem(2).as("Level"),
-      split(col("value"), " ").getItem(3).as("Source"),
-      split(col("value"), " ").getItem(5).as("Message")
-    )
+      load().
+      selectExpr("CAST(value AS STRING)")
+//      select(
+//        split(col("value"), " ").getItem(0).as("Timestamp"),
+//        split(col("value"), " ").getItem(2).as("Level"),
+//        split(col("value"), " ").getItem(3).as("Source"),
+//        split(col("value"), " ").getItem(5).as("Message")
+//      )
 
     val mail = df.as[String].foreach(
       x => {
