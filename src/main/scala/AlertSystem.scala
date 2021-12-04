@@ -23,13 +23,11 @@ object AlertSystem {
       split(col("value"), " ").getItem(5).as("Message")
     )
 
-    val query = df.writeStream.outputMode("append").format("console").start
+    val query = df.writeStream.outputMode("append").format("console").start.awaitTermination(20000)
 
     val mail = createHtmlEmailBody(df)
 
     println(mail)
-
-    query.awaitTermination()
 
   }
 
