@@ -5,6 +5,8 @@ import courier._, Defaults._
 import scala.util._
 import mail._
 
+import com.spark.mail.Email
+
 object AlertSystem {
 
   def main(args: Array[String]) = {
@@ -70,13 +72,13 @@ object AlertSystem {
          |   </body>
          |</html>""".stripMargin
 
-    send a Mail (
-      from = ("nsj0596@gmail.com", "John Smith"),
-      to = "rajitsp@gmail.com",
-      cc = "valluruindra@gmail.com",
-      subject = "Eureka",
-      message = msg
-    )
+//    send a Mail (
+//      from = ("nsj0596@gmail.com", "John Smith"),
+//      to = "rajitsp@gmail.com",
+//      cc = "valluruindra@gmail.com",
+//      subject = "Eureka",
+//      message = msg
+//    )
 
 
 
@@ -92,19 +94,10 @@ object AlertSystem {
 //      case Success(_) => println("message delivered")
 //      case Failure(_) => println("delivery failed")
 //    }
-//
-//    mailer(Envelope.from("you" `@` "work.com")
-//      .to("boss" `@` "work.com")
-//      .subject("tps report")
-//      .content(Multipart()
-//        .attach(new java.io.File("tps.xls"))
-//        .html("<html><body><h1>IT'S IMPORTANT</h1></body></html>")))
-//      .onComplete {
-//        case Success(_) => println("delivered report")
-//        case Failure(_) => println("delivery failed")
-//      }
 
+    val mail = new Email("/home/hadoop/SparkLogAlertSystem/src/main/resource/application.conf")
 
+    mail.sendMail(msg, "appID", "", "F")
 
     msg
 
