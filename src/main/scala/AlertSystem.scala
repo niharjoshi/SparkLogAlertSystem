@@ -23,20 +23,22 @@ object AlertSystem {
       split(col("value"), " ").getItem(5).as("Message")
     )
 
-    val query = df.writeStream.outputMode("append").format("console").start.awaitTermination(20000)
+    val mail = df.as[String].foreach(
+      x => {
+        val msg = createHtmlEmailBody(x)
+        println(msg)
+      }
+    )
 
-    val mail = createHtmlEmailBody(df)
-
-    println(mail)
-
+    df.writeStream.outputMode("append").format("console").start.awaitTermination(20000)
   }
 
-  def createHtmlEmailBody(df: DataFrame): String = {
-    val columnNames = df.columns.map(x => "<th>" + x.trim + "</th>").mkString
-    val data = df.collect.mkString
-    val data1 = data.split(",").map(x => "<td>".concat(x).concat("</td>"))
-    val data2 = data1.mkString.replaceAll("<td>\\[", "<tr><td>")
-    val data3 = data2.mkString.replaceAll("]\\[", "</td></tr><td>").replaceAll("]", "")
+  def createHtmlEmailBody(df: String): String = {
+//    val columnNames = df.columns.map(x => "<th>" + x.trim + "</th>").mkString
+//    val data = df.collect.mkString
+//    val data1 = data.split(",").map(x => "<td>".concat(x).concat("</td>"))
+//    val data2 = data1.mkString.replaceAll("<td>\\[", "<tr><td>")
+//    val data3 = data2.mkString.replaceAll("]\\[", "</td></tr><td>").replaceAll("]", "")
 
     val msg =
       s"""<!DOCTYPE html>
@@ -60,7 +62,7 @@ object AlertSystem {
          |   <body>
          |      <h1>Report</h1>
          |      <table>
-         |         <tr> $columnNames </tr> $data3
+         |         <tr> Message </tr> $df
          |      </table>
          |   </body>
          |</html>""".stripMargin
