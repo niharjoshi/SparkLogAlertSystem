@@ -36,7 +36,7 @@ object AlertSystem {
       Array[String](i)
     })
 
-    mail.writeStream.outputMode("append").format("console").start.awaitTermination(20000)
+    mail.writeStream.outputMode("append").format("console").start.awaitTermination()
 
     println("Terminated")
   }
