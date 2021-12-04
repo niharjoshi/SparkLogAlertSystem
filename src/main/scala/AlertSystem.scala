@@ -1,6 +1,9 @@
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions.{col, split}
 
+import javax.mail._
+import javax.mail.internet._
+
 object AlertSystem {
 
   def main(args: Array[String]) = {
@@ -26,8 +29,7 @@ object AlertSystem {
 //      )
 
     val mail = df.as[String].flatMap(i => {
-      val msg = createHtmlEmailBody(i)
-      println(msg)
+      sendEmail(i)
       Array[String](i)
     })
 
@@ -36,12 +38,9 @@ object AlertSystem {
     println("Terminated")
   }
 
-  def createHtmlEmailBody(df: String): String = {
-//    val columnNames = df.columns.map(x => "<th>" + x.trim + "</th>").mkString
-//    val data = df.collect.mkString
-//    val data1 = data.split(",").map(x => "<td>".concat(x).concat("</td>"))
-//    val data2 = data1.mkString.replaceAll("<td>\\[", "<tr><td>")
-//    val data3 = data2.mkString.replaceAll("]\\[", "</td></tr><td>").replaceAll("]", "")
+  def sendEmail(m: String): String = {
+
+    val log_data = m.split(" ").toList
 
     val msg =
       s"""<!DOCTYPE html>
@@ -65,11 +64,33 @@ object AlertSystem {
          |   <body>
          |      <h1>Report</h1>
          |      <table>
-         |         <tr> Message </tr> $df
+         |         <tr> Message </tr> $m
          |      </table>
          |   </body>
          |</html>""".stripMargin
 
-    return msg
+
+    val props = System.getProperties
+    props.setProperty("mail.smtp.host", "smtp.gmail.com")
+    props.setProperty("mail.smtp.user", "user")
+    props.setProperty("mail.smtp.host", "smtp.gmail.com")
+    props.setProperty("mail.smtp.port", "587")
+    props.setProperty("mail.debug", "true")
+    props.setProperty("mail.smtp.auth", "true")
+    props.setProperty("mail.smtp.starttls.enable", "true")
+    props.setProperty("mail.smtp.EnableSSL.enable","true")
+
+    val session = Session.getInstance(props)
+    val message = new MimeMessage(session)
+
+    message.setFrom(new InternetAddress("nsj0596@gmail.com"))
+    message.setRecipients(Message.RecipientType.TO, "rajitsp@gmail.com")
+    message.setSubject("Eureka")
+    message.setText(msg)
+
+    Transport.send(message)
+
+    msg
+
   }
 }
