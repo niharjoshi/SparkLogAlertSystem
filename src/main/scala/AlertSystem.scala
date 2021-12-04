@@ -26,9 +26,9 @@ object AlertSystem {
 //      )
 
     val mail = df.as[String].flatMap(i => {
-      val msg = createHtmlEmailBody(_)
+      val msg = createHtmlEmailBody(i)
       println(msg)
-      i.split("")
+      Array[String](i)
     })
 
     mail.writeStream.outputMode("append").format("console").start.awaitTermination(20000)
