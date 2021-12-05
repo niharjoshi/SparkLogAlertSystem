@@ -126,19 +126,20 @@ git clone https://github.com/niharjoshi/SparkLogAlertSystem.git
 
 Next, build the JAR package so you can submit the bundle to the Spark shell:
 ```console
-sbt clean compile package
+sbt clean compile assembly
 ```
 
 The generated JAR file will be located at ```target/scala-2.11/sparklogalertsystem_2.11-0.1.jar ```.
 
 Now, you can run the JAR file over the Spark shell using:
 ```console
-spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.8 /home/hadoop/SparkLogAlertSystem/target/scala-2.11/sparklogalertsystem_2.11-0.1.jar
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.8 /home/hadoop/SparkLogAlertSystem/target/scala-2.11/SparkLogAlertSystem-assembly-0.1.jar
 ```
 
 *Note: Do not forget to pass the Spark Kafka SDK manually through ```--packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.8``` in the command for compatibility purposes.*
 
 You should get an email notification:
+
 ![Alt text](doc/email-alert.png?raw=true "Email Alert")
 
 ---
