@@ -167,9 +167,13 @@ When we submit our JAR file to Spark, it starts reading logs from the Kafka topi
 
 As it reads the logs, it adds them to a Spark RDD which is then parallelized over the slave nodes in batches.
 
+![Alt text](doc/spark-shell.png?raw=true "Spark Shell")
+
 An email body is constructed for each batch and this email body is submitted to an AWS SNS topic.
 
 The SNS topic automatically triggers an email notification to the stakeholders.
+
+![Alt text](doc/email-alert.png?raw=true "Email Alert")
 
 ---
 
