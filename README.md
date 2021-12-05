@@ -147,7 +147,7 @@ You should get an email notification:
 
 **A YouTube video documenting the detailed architecture and flow of control can be found here:**
 
-### Note: This repository pertains to **Project Component 2**.
+### Note: This repository pertains to **Project Component 3**.
 
 ![Alt text](doc/flowchart.jpg?raw=true "Flow of Control")
 
